@@ -53,7 +53,7 @@ func (c *Config) LoadConfigFromFile() error {
 }
 
 func (c *Config) SetDefaultConfig() {
-	c.CMD = "zed"
+	c.CMD = "code"
 	c.ProjectDirs = []string{
 		"Development/work",
 		"Development/personal",

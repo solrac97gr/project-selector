@@ -31,8 +31,9 @@ The configuration is managed through a configuration file. If the configuration 
 `$HOME/.config/project-selector/config.json`
 
 ```json
+// This is the default config
 {
-  "cmd": "zed",
+  "cmd": "code",
   "project_dirs": ["Development/work"], // From $HOME directory
   "dirs_to_ignore": ["secret-projects"], // If the path contains this strings, it will be ignored
   "number_of_projects": 10,
@@ -61,7 +62,7 @@ The configuration is managed through a configuration file. If the configuration 
     project-selector
     ```
 
-2. Follow the interactive prompt to select a project.
+2. Follow the interactive prompt to select a project or use the Search input.
 
 3. The selected project will be opened with the specified command.
 
@@ -69,11 +70,53 @@ The configuration is managed through a configuration file. If the configuration 
 
 ```sh
 $ project-selector
-? Select a Project 🚀:
-  ▸ 📁 project1
-    📁 project2
-    📁 project3
+Search: my-
+Select a Project 🔎 (ctrl+c to cancel)
+  🚀 📁 my-project
+   📁 my-website
+   📁 my-blog
+   📁 my-app
+   📁 my-API
+↓  📁 my-AI
 ```
+## Use your own configuration
+
+1. Create a configuration file in the default path:
+
+    ```sh
+    mkdir -p $HOME/.config/project-selector
+    touch $HOME/.config/project-selector/config.json
+    ```
+2. Edit the configuration file with your settings.
+
+      ```json
+      {
+        "cmd": "zed", // Open the project with the zed editor instead of code
+        "project_dirs": ["Development/work"],
+        "dirs_to_ignore": ["secret-projects"],
+        "number_of_projects": 10,
+        "style": {
+          "title": {
+            "template": "{{ . | blue | bold }}",
+            "icon": "🔎"
+          },
+          "active": {
+            "template": "{{ . | blue | underline | bold}}",
+            "icon": "🚀"
+          },
+          "inactive": {
+            "template": "{{ . | cyan }}",
+            "icon": "📁"
+          }
+        }
+      }
+      ```
+
+3. Run the project selector for loading the new configuration:
+
+    ```sh
+    project-selector
+    ```
 
 ## Contributing
 
