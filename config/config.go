@@ -9,8 +9,9 @@ import (
 )
 
 type Config struct {
-	CMD         string   `json:"cmd"`
-	ProjectDirs []string `json:"project_dirs"`
+	CMD              string   `json:"cmd"`
+	ProjectDirs      []string `json:"project_dirs"`
+	NumberOfProjects int      `json:"number_of_projects"`
 }
 
 func NewConfig() *Config {
@@ -43,4 +44,5 @@ func (c *Config) SetDefaultConfig() {
 		"Development/work",
 		"Development/personal",
 	}
+	c.NumberOfProjects = 5
 }

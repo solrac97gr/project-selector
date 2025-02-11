@@ -45,7 +45,7 @@ func main() {
 	}
 
 	// Select a project
-	selectedProjectPath, err := selectProject(projectDirs)
+	selectedProjectPath, err := selectProject(projectDirs, config.NumberOfProjects)
 	if err != nil {
 		fmt.Printf("Prompt failed %v\n", err)
 		return
@@ -84,7 +84,7 @@ func findProjectDirs(rootDir string, projectDirs *[]string) error {
 	return err
 }
 
-func selectProject(projectDirs []string) (string, error) {
+func selectProject(projectDirs []string, size int) (string, error) {
 	// Prepare the project names for the selection list
 	var projectNames []string
 	for _, dir := range projectDirs {
@@ -94,8 +94,12 @@ func selectProject(projectDirs []string) (string, error) {
 
 	// Setup the interactive prompt
 	prompt := promptui.Select{
-		Label: "Select a Project 🚀:",
+		Label: "Select a Project 🚀",
 		Items: projectNames,
+		Size:  size,
+		Searcher: func(input string, index int) bool {
+			return strings.Contains(projectNames[index], input)
+		},
 	}
 
 	// Run the prompt
