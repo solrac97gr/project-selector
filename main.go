@@ -31,7 +31,7 @@ func main() {
 	// Iterate over the config.ProjectDirs array and load the project directories
 	for _, dir := range config.ProjectDirs {
 		rootDir := filepath.Join(usr.HomeDir, dir)
-		err = findProjectDirs(rootDir, &projectDirs)
+		err = findProjectDirs(rootDir, &projectDirs, config.DirsToIgnore)
 		if err != nil {
 			fmt.Printf("Error walking the path %v: %v\n", rootDir, err)
 			return
@@ -60,7 +60,7 @@ func main() {
 	}
 }
 
-func findProjectDirs(rootDir string, projectDirs *[]string) error {
+func findProjectDirs(rootDir string, projectDirs *[]string, dirsToIgnore []string) error {
 	err := filepath.Walk(rootDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -71,9 +71,16 @@ func findProjectDirs(rootDir string, projectDirs *[]string) error {
 			return nil
 		}
 
-		// Only consider directories that are exactly one level deep inside Development/work/
+		// Check if the directory is in the dirsToIgnore list
+		for _, dir := range dirsToIgnore {
+			if strings.Contains(path, dir) {
+				return nil
+			}
+		}
+
+		// Only consider directories that are exactly one level deep inside rootDir
 		relPath, _ := filepath.Rel(rootDir, path)
-		if info.IsDir() && relPath != "." && !strings.Contains(relPath, "/") {
+		if info.IsDir() && relPath != "." && !strings.Contains(relPath, string(os.PathSeparator)) {
 			// Extract the project name (last part of the path)
 			*projectDirs = append(*projectDirs, path)
 		}

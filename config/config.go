@@ -11,6 +11,7 @@ import (
 type Config struct {
 	CMD              string   `json:"cmd"`
 	ProjectDirs      []string `json:"project_dirs"`
+	DirsToIgnore     []string `json:"dirs_to_ignore"`
 	NumberOfProjects int      `json:"number_of_projects"`
 }
 
@@ -43,6 +44,10 @@ func (c *Config) SetDefaultConfig() {
 	c.ProjectDirs = []string{
 		"Development/work",
 		"Development/personal",
+	}
+	c.DirsToIgnore = []string{
+		"node_modules",
+		".git",
 	}
 	c.NumberOfProjects = 5
 }
