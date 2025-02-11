@@ -96,7 +96,7 @@ func selectProject(projectDirs []string, size int) (string, error) {
 	var projectNames []string
 	for _, dir := range projectDirs {
 		_, name := splitProjectPath(dir)
-		projectNames = append(projectNames, "📁 "+name)
+		projectNames = append(projectNames, name)
 	}
 
 	// Setup the interactive prompt
@@ -108,6 +108,12 @@ func selectProject(projectDirs []string, size int) (string, error) {
 			return strings.Contains(projectNames[index], input)
 		},
 		StartInSearchMode: true,
+		Templates: &promptui.SelectTemplates{
+			Label:    "{{ . | blue | bold }}",
+			Active:   "➡️ 📁 {{ . | blue | underline | bold}}",
+			Inactive: "📁 {{ . | cyan }}",
+			Selected: "➡️📁 {{ . | red | cyan }}",
+		},
 	}
 
 	// Run the prompt
@@ -117,7 +123,7 @@ func selectProject(projectDirs []string, size int) (string, error) {
 	}
 
 	// Get the full path of the selected project
-	selectedProjectPath := getProjectPath(strings.Split(selectedProject, " ")[1], projectDirs)
+	selectedProjectPath := getProjectPath(selectedProject, projectDirs)
 	return selectedProjectPath, nil
 }
 
