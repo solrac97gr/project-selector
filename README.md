@@ -32,8 +32,9 @@ The configuration is managed through a configuration file. If the configuration 
 
 ```json
 {
-  "cmd": "zed"
-  "project_directory": "Development/work" // From $HOME directory
+  "cmd": "zed",
+  "project_dirs": ["Development/work"], // From $HOME directory
+  "number_of_projects": 10
 }
 ```
 
