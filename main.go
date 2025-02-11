@@ -110,9 +110,9 @@ func selectProject(projectDirs []string, size int) (string, error) {
 		StartInSearchMode: true,
 		Templates: &promptui.SelectTemplates{
 			Label:    "{{ . | blue | bold }}",
-			Active:   "➡️ 📁 {{ . | blue | underline | bold}}",
+			Active:   "🚀 📁 {{ . | blue | underline | bold}}",
 			Inactive: "📁 {{ . | cyan }}",
-			Selected: "➡️📁 {{ . | red | cyan }}",
+			Selected: "🚀 📁 {{ . | red | cyan }}",
 		},
 	}
 
@@ -155,6 +155,5 @@ func executeZedCommand(projectPath string, openWith string) error {
 	if err != nil {
 		return fmt.Errorf("failed to execute zed command: %w", err)
 	}
-
 	return nil
 }
