@@ -3,7 +3,6 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -40,7 +39,7 @@ func (c *Config) LoadConfigFromFile() error {
 	}
 
 	configFilePath := filepath.Join(homeDir, ".config", "project-selector", "config.json")
-	fileContents, err := ioutil.ReadFile(configFilePath)
+	fileContents, err := os.ReadFile(configFilePath)
 	if err != nil {
 		return fmt.Errorf("failed to read config file: %w", err)
 	}
