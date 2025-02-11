@@ -13,6 +13,20 @@ type Config struct {
 	ProjectDirs      []string `json:"project_dirs"`
 	DirsToIgnore     []string `json:"dirs_to_ignore"`
 	NumberOfProjects int      `json:"number_of_projects"`
+	Style            struct {
+		Title struct {
+			Template string `json:"template"`
+			Icon     string `json:"icon"`
+		} `json:"title"`
+		Active struct {
+			Template string `json:"template"`
+			Icon     string `json:"icon"`
+		} `json:"active"`
+		Inactive struct {
+			Template string `json:"template"`
+			Icon     string `json:"icon"`
+		} `json:"inactive"`
+	} `json:"style"`
 }
 
 func NewConfig() *Config {
@@ -50,4 +64,14 @@ func (c *Config) SetDefaultConfig() {
 		".git",
 	}
 	c.NumberOfProjects = 5
+
+	c.Style.Title.Template = "{{ . | blue | bold }}"
+	c.Style.Title.Icon = "🔎"
+
+	c.Style.Active.Template = "{{ . | blue | underline | bold}}"
+	c.Style.Active.Icon = "🚀"
+
+	c.Style.Inactive.Template = "{{ . | cyan }}"
+	c.Style.Inactive.Icon = "📁"
+
 }

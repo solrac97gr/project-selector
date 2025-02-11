@@ -45,7 +45,7 @@ func main() {
 	}
 
 	// Select a project
-	selectedProjectPath, err := selectProject(projectDirs, config.NumberOfProjects)
+	selectedProjectPath, err := selectProject(projectDirs, config)
 	if err != nil {
 		if strings.Contains(err.Error(), "^C") {
 			fmt.Println("Selection canceled.")
@@ -95,7 +95,7 @@ func findProjectDirs(rootDir string, projectDirs *[]string, dirsToIgnore []strin
 	return err
 }
 
-func selectProject(projectDirs []string, size int) (string, error) {
+func selectProject(projectDirs []string, config *config.Config) (string, error) {
 	// Prepare the project names for the selection list
 	var projectNames []string
 	for _, dir := range projectDirs {
@@ -105,18 +105,18 @@ func selectProject(projectDirs []string, size int) (string, error) {
 
 	// Setup the interactive prompt
 	prompt := promptui.Select{
-		Label: "Select a Project 🚀 (ctrl+c to cancel)",
+		Label: fmt.Sprintf("Select a Project %s (ctrl+c to cancel)", config.Style.Title.Icon),
 		Items: projectNames,
-		Size:  size,
+		Size:  config.NumberOfProjects,
 		Searcher: func(input string, index int) bool {
 			return strings.Contains(projectNames[index], input)
 		},
 		StartInSearchMode: true,
 		Templates: &promptui.SelectTemplates{
-			Label:    "{{ . | blue | bold }}",
-			Active:   "🚀 📁 {{ . | blue | underline | bold}}",
-			Inactive: "📁 {{ . | cyan }}",
-			Selected: "🚀 📁 {{ . | red | cyan }}",
+			Label:    config.Style.Title.Template,
+			Active:   fmt.Sprintf("%s %s %s", config.Style.Active.Icon, config.Style.Inactive.Icon, config.Style.Active.Template),
+			Inactive: fmt.Sprintf(" %s %s", config.Style.Inactive.Icon, config.Style.Inactive.Template),
+			Selected: "✅ {{ . | blue }}",
 		},
 	}
 

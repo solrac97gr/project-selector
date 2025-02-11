@@ -35,7 +35,21 @@ The configuration is managed through a configuration file. If the configuration 
   "cmd": "zed",
   "project_dirs": ["Development/work"], // From $HOME directory
   "dirs_to_ignore": ["secret-projects"], // If the path contains this strings, it will be ignored
-  "number_of_projects": 10
+  "number_of_projects": 10,
+  "style": {
+    "title": {
+      "template": "{{ . | blue | bold }}",
+      "icon": "🔎"
+    },
+    "active": {
+      "template": "{{ . | blue | underline | bold}}",
+      "icon": "🚀"
+    },
+    "inactive": {
+      "template": "{{ . | cyan }}",
+      "icon": "📁"
+    }
+  }
 }
 ```
 
