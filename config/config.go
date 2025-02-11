@@ -6,13 +6,11 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 type Config struct {
-	CMD              string   `json:"cmd"`
-	ProjectDirectory string   `json:"project_directory"`
-	ProjectDirs      []string `json:"-"`
+	CMD         string   `json:"cmd"`
+	ProjectDirs []string `json:"project_dirs"`
 }
 
 func NewConfig() *Config {
@@ -36,12 +34,13 @@ func (c *Config) LoadConfigFromFile() error {
 		return fmt.Errorf("failed to unmarshal config file: %w", err)
 	}
 
-	c.ProjectDirs = strings.Split(c.ProjectDirectory, "/")
 	return nil
 }
 
 func (c *Config) SetDefaultConfig() {
 	c.CMD = "zed"
-	c.ProjectDirectory = "Development/work/bayonet"
-	c.ProjectDirs = strings.Split(c.ProjectDirectory, "/")
+	c.ProjectDirs = []string{
+		"Development/work",
+		"Development/personal",
+	}
 }

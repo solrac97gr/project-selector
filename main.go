@@ -25,12 +25,43 @@ func main() {
 		return
 	}
 
-	// Define the root directory where the projects are located
-	rootDir := filepath.Join(append([]string{usr.HomeDir}, config.ProjectDirs...)...)
-
-	// Walk through the directories to find project folders
+	// Initialize the projectDirs slice
 	var projectDirs []string
-	err = filepath.Walk(rootDir, func(path string, info os.FileInfo, err error) error {
+
+	// Iterate over the config.ProjectDirs array and load the project directories
+	for _, dir := range config.ProjectDirs {
+		rootDir := filepath.Join(usr.HomeDir, dir)
+		err = findProjectDirs(rootDir, &projectDirs)
+		if err != nil {
+			fmt.Printf("Error walking the path %v: %v\n", rootDir, err)
+			return
+		}
+	}
+
+	// If no projects found
+	if len(projectDirs) == 0 {
+		fmt.Println("No projects found.")
+		return
+	}
+
+	// Select a project
+	selectedProjectPath, err := selectProject(projectDirs)
+	if err != nil {
+		fmt.Printf("Prompt failed %v\n", err)
+		return
+	}
+
+	// Execute the zed command with the selected project path
+	if selectedProjectPath != "" {
+		err := executeZedCommand(selectedProjectPath, config.CMD)
+		if err != nil {
+			fmt.Printf("Error executing zed: %v\n", err)
+		}
+	}
+}
+
+func findProjectDirs(rootDir string, projectDirs *[]string) error {
+	err := filepath.Walk(rootDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -44,23 +75,16 @@ func main() {
 		relPath, _ := filepath.Rel(rootDir, path)
 		if info.IsDir() && relPath != "." && !strings.Contains(relPath, "/") {
 			// Extract the project name (last part of the path)
-			projectDirs = append(projectDirs, path)
+			*projectDirs = append(*projectDirs, path)
 		}
 
 		return nil
 	})
 
-	if err != nil {
-		fmt.Printf("Error walking the path %v: %v\n", rootDir, err)
-		return
-	}
+	return err
+}
 
-	// If no projects found
-	if len(projectDirs) == 0 {
-		fmt.Println("No projects found.")
-		return
-	}
-
+func selectProject(projectDirs []string) (string, error) {
 	// Prepare the project names for the selection list
 	var projectNames []string
 	for _, dir := range projectDirs {
@@ -77,20 +101,12 @@ func main() {
 	// Run the prompt
 	_, selectedProject, err := prompt.Run()
 	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
-		return
+		return "", err
 	}
 
 	// Get the full path of the selected project
 	selectedProjectPath := getProjectPath(strings.Split(selectedProject, " ")[1], projectDirs)
-
-	// Execute the zed command with the selected project path
-	if selectedProjectPath != "" {
-		err := executeZedCommand(selectedProjectPath, config.CMD)
-		if err != nil {
-			fmt.Printf("Error executing zed: %v\n", err)
-		}
-	}
+	return selectedProjectPath, nil
 }
 
 func splitProjectPath(path string) (string, string) {
