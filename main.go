@@ -47,6 +47,10 @@ func main() {
 	// Select a project
 	selectedProjectPath, err := selectProject(projectDirs, config.NumberOfProjects)
 	if err != nil {
+		if strings.Contains(err.Error(), "^C") {
+			fmt.Println("Selection canceled.")
+			return
+		}
 		fmt.Printf("Prompt failed %v\n", err)
 		return
 	}
@@ -101,7 +105,7 @@ func selectProject(projectDirs []string, size int) (string, error) {
 
 	// Setup the interactive prompt
 	prompt := promptui.Select{
-		Label: "Select a Project 🚀",
+		Label: "Select a Project 🚀 (ctrl+c to cancel)",
 		Items: projectNames,
 		Size:  size,
 		Searcher: func(input string, index int) bool {
