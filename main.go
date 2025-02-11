@@ -107,6 +107,7 @@ func selectProject(projectDirs []string, size int) (string, error) {
 		Searcher: func(input string, index int) bool {
 			return strings.Contains(projectNames[index], input)
 		},
+		StartInSearchMode: true,
 	}
 
 	// Run the prompt
