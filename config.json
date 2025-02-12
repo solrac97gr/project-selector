@@ -1,0 +1,24 @@
+{
+  "cmd": "code",
+  "project_dirs": [
+    "Development/personal"
+  ],
+  "dirs_to_ignore": [
+    "node_modules"
+  ],
+  "number_of_projects": 5,
+  "style": {
+    "title": {
+      "template": "{{ . | blue | bold }}",
+      "icon": "🔎"
+    },
+    "active": {
+      "template": "{{ . | blue | underline | bold}}",
+      "icon": "🚀"
+    },
+    "inactive": {
+      "template": "{{ . | cyan }}",
+      "icon": "📁"
+    }
+  }
+}

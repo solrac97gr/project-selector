@@ -28,6 +28,8 @@ Project Selector is a command-line tool that allows you to quickly select and op
 
 The configuration is managed through a configuration file. If the configuration file is not found, default settings will be used.
 
+> Note: You can use the command `make config` to create the configuration file automatically and open it using nano.
+
 `$HOME/.config/project-selector/config.json`
 
 ```json
